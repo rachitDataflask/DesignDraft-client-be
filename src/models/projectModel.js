@@ -5,7 +5,6 @@ const userSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      unique: true,
     },
     name: {
       type: String,
@@ -32,8 +31,11 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    project_data: {
+      type: Object,
+    },
   },
   { timestamps: true }
 );
 
-export default mongoose.model("User", userSchema);
+export default mongoose.model("Project", userSchema);
