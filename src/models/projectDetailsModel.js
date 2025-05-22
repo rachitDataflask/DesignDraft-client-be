@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema(
     project: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      unique: true,
+      // unique: true,
     },
     scale: {
       type: Number,

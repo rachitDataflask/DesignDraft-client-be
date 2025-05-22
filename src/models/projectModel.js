@@ -2,34 +2,30 @@ import mongoose, { Mongoose } from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    user: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
       required: true,
     },
     name: {
       type: String,
       required: true,
-      unique: true,
     },
     location: {
       type: String,
       required: true,
-      unique: true,
     },
     building_type: {
       type: String,
       required: true,
-      unique: true,
     },
     sub_building_type: {
       type: String,
       required: true,
-      unique: true,
     },
     level: {
       type: String,
       required: true,
-      unique: true,
     },
     project_data: {
       type: Object,
