@@ -1,21 +1,17 @@
 import express from "express";
+import upload from "../middlewares/uploadMiddleware.js";
 import {
-  //   getUserProjectData,
   listAllProjects,
   createProject,
   updateProjectData,
   deleteProjectData,
-  //   updateNestedProjectData,
-} from "../controllers/userProjectController.js";
+} from "../controllers/ProjectController.js";
 import verifyToken from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-// router.get("/project-data", verifyToken, getUserProjectData);
 router.get("/project", verifyToken, listAllProjects);
-router.post("/project", verifyToken, createProject);
+router.post("/project", verifyToken, upload.single("dxf_file"), createProject);
 router.delete("/project/:id", verifyToken, deleteProjectData);
-// router.patch("/project-data/:id", verifyToken, updateProjectData);
-// router.patch("/project-data/nested", verifyToken, updateNestedProjectData);
 
 export default router;
