@@ -39,10 +39,10 @@ export const createProject = async (req, res) => {
     });
 
     await newProject.save();
-    const limitedEntities = parsedData.entities?.slice(0, 100);
+    const Entities = parsedData.entities;
     res.status(201).json({
       message: `${name} successfully created`,
-      parsedDxf: limitedEntities,
+      entities: Entities,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

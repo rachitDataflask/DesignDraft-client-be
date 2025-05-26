@@ -35,10 +35,10 @@ export const createQeProject = async (req, res) => {
     });
 
     await newQEProject.save();
-    const limitedEntities = parsedData.entities?.slice(0, 100);
+    const layers = parsedData.tables.layer;
     res.status(201).json({
       message: `${name} successfully created for Quantity Extraction`,
-      parsedDxf: limitedEntities,
+      layers: layers,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
