@@ -2,9 +2,9 @@ import mongoose, { Mongoose } from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    userId: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
     name: {
@@ -27,9 +27,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    project_data: {
-      type: Object,
-    },
+    // project_data: {
+    //   type: Object,
+    // },
   },
   { timestamps: true }
 );

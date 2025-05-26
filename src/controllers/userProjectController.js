@@ -26,6 +26,7 @@ export const listAllProjects = async (req, res) => {
     const userId = req.user.id;
 
     const projects = await Project.find({ user: userId });
+    console.log(projects);
 
     res.status(200).json(projects);
   } catch (err) {
@@ -70,26 +71,29 @@ export const updateProjectData = async (req, res) => {
   }
 };
 
-// Add project_data
+export const deleteProjectData = async (req, res, next) => {
+  try {
+    console.log("User from token:", req.user);
+    const projectId = req.params.id;
 
-// // Update nested key inside project_data
-// export const updateNestedProjectData = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const { mainKey, nestedKey, value } = req.body;
+    const project = await Project.findOne({
+      _id: projectId,
+      user: req.user.id,
+    });
 
-//     const user = await User.findById(id);
-//     if (!user) return res.status(404).json({ error: "User not found" });
+    if (!project) {
+      return res
+        .status(404)
+        .json({ error: "Project not found or unauthorized" });
+    }
 
-//     if (!user.project_data || !user.project_data[mainKey]) {
-//       return res.status(400).json({ error: "Main key does not exist" });
-//     }
+    await project.deleteOne();
 
-//     user.project_data[mainKey][nestedKey] = value;
-
-//     const updatedUser = await user.save();
-//     res.status(200).json(updatedUser.project_data[mainKey]);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
+    res.send({
+      status: 200,
+      message: "Project deleted successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
