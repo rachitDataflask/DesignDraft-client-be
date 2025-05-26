@@ -1,6 +1,6 @@
 import mongoose, { Mongoose } from "mongoose";
 
-const userSchema = new mongoose.Schema(
+const projectSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -27,11 +27,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // project_data: {
-    //   type: Object,
-    // },
+    dxf_file: { type: String, default: null },
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Project", userSchema);
+export default mongoose.model("Project", projectSchema);
