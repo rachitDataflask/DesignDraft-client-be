@@ -35,14 +35,12 @@ export const createProject = async (req, res) => {
       building_type,
       sub_building_type,
       level,
-      dxf_file: dxfFilePath, // optional: save the path for later reference
+      dxf_entities: parsedData.entities,
     });
 
     await newProject.save();
-    const Entities = parsedData.entities;
     res.status(201).json({
       message: `${name} successfully created`,
-      entities: Entities,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -54,7 +52,6 @@ export const listAllProjects = async (req, res) => {
     const userId = req.user.id;
 
     const projects = await Project.find({ user: userId });
-    console.log(projects);
 
     res.status(200).json(projects);
   } catch (err) {
@@ -62,30 +59,20 @@ export const listAllProjects = async (req, res) => {
   }
 };
 
-export const updateProjectData = async (req, res) => {
+export const getProjectById = async (req, res) => {
   try {
-    const { projectId } = req.params;
-    const { project_data } = req.body;
+    const projectId = req.params.id;
 
     const project = await Project.findOne({
       _id: projectId,
+      user: req.user.id,
     });
-
-    project.project_data = {};
-    await project.save();
-
-    if (project.project_data) {
-      project.project_data = {
-        ...project.project_data,
-        ...project_data,
-      };
-      await project.save();
+    if (!project) {
+      return res
+        .status(404)
+        .json({ error: "Project not found or unauthorized" });
     }
-
-    res.status(200).json({
-      message: "Project data updated successfully",
-      // project_data: updated.project_data,
-    });
+    res.status(200).json(project);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -93,7 +80,6 @@ export const updateProjectData = async (req, res) => {
 
 export const deleteProjectData = async (req, res, next) => {
   try {
-    console.log("User from token:", req.user);
     const projectId = req.params.id;
 
     const project = await Project.findOne({
