@@ -7,38 +7,39 @@ export const createQeProject = async (req, res) => {
   try {
     const { user, name, service, building_type, level } = req.body;
 
-    const dxfFilePath = req.file
-      ? path.join(req.file.destination, req.file.filename)
-      : null;
+        // Path to the uploaded file
+        const dxfFilePath = req.file
+          ? path.join(req.file.destination, req.file.filename)
+          : null;
+    
+        let parsedData = null;
+    
+        if (dxfFilePath) {
+          const parser = new DxfParser();
+          const dxfContents = fs.readFileSync(dxfFilePath, "utf-8");
+          try {
+            parsedData = parser.parseSync(dxfContents);
+          } catch (parseErr) {
+            return res
+              .status(400)
+              .json({ error: "Invalid DXF file", details: parseErr.message });
+          }
+        }
 
-    let parsedData = null;
-
-    if (dxfFilePath) {
-      const parser = new DxfParser();
-      const dxfContents = fs.readFileSync(dxfFilePath, "utf-8");
-      try {
-        parsedData = parser.parseSync(dxfContents);
-      } catch (parseErr) {
-        return res
-          .status(400)
-          .json({ error: "Invalid DXF file", details: parseErr.message });
-      }
-    }
-
-    const newQEProject = new qeProject({
+    const newQEProjectData = new qeProject({
       user,
       name,
       service,
       building_type,
       level,
-      dxf_file: dxfFilePath,
+      dxf_entities:parsedData.entities
     });
 
-    await newQEProject.save();
-    const layers = parsedData.tables.layer;
+    const newQEProject = new qeProject(newQEProjectData)
+    await newQEProject.save()
+
     res.status(201).json({
       message: `${name} successfully created for Quantity Extraction`,
-      layers: layers,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -52,6 +53,25 @@ export const listAllQeProjects = async (req, res) => {
     const qeprojects = await qeProject.find({ user: userId });
 
     res.status(200).json(qeprojects);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const getQeProjectById = async (req, res) => {
+  try {
+    const projectId = req.params.id;
+
+    const qeproject = await qeProject.findOne({
+      _id: projectId,
+      user: req.user.id,
+    });
+    if (!qeproject) {
+      return res
+        .status(404)
+        .json({ error: "Project not found or unauthorized" });
+    }
+    res.status(200).json(qeproject);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

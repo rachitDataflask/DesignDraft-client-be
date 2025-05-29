@@ -3,50 +3,6 @@ import path from "path";
 import fs from "fs";
 import DxfParser from "dxf-parser";
 
-// export const createProject = async (req, res) => {
-//   try {
-//     const { user, name, location, building_type, sub_building_type, level } =
-//       req.body;
-
-//     // Path to the uploaded file
-//     const dxfFilePath = req.file
-//       ? path.join(req.file.destination, req.file.filename)
-//       : null;
-
-//     let parsedData = null;
-
-//     if (dxfFilePath) {
-//       const parser = new DxfParser();
-//       const dxfContents = fs.readFileSync(dxfFilePath, "utf-8");
-//       try {
-//         parsedData = parser.parseSync(dxfContents);
-//       } catch (parseErr) {
-//         return res
-//           .status(400)
-//           .json({ error: "Invalid DXF file", details: parseErr.message });
-//       }
-//     }
-
-//     // Create the project in the database
-//     const newProject = new Project({
-//       user,
-//       name,
-//       location,
-//       building_type,
-//       sub_building_type,
-//       level,
-//       dxf_entities: parsedData.entities,
-//     });
-
-//     await newProject.save();
-//     res.status(201).json({
-//       message: `${name} successfully created`,
-//     });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
 
 export const createProject = async (req, res) => {
   try {
