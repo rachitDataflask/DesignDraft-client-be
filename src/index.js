@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import dbConnect from "./config/dbConnect.js";
 import authRoutes from "./routes/authRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
-import qeRoutes from "./routes/qeRoutes.js"; // Assuming qeRoutes is similar to projectRoutes
+import qeRoutes from "./routes/qeRoutes.js";
+import calculations from "./routes/calculationRoutes.js"
 
 dotenv.config();
 dbConnect();
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api", projectRoutes);
 app.use("/api", qeRoutes);
+app.use("/api",calculations)
 
 //Start the server
 const PORT = process.env.PORT || 8000;
