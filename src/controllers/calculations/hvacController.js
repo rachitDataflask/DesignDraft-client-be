@@ -12,6 +12,7 @@ export const calculateHeatLoadHandler = (req, res) => {
     }
 
     const result = calculateHeatLoad(inputData);
+    console.log("user input---------------------", inputData);
     res.json({ success: true, data: result });
   } catch (error) {
     res.status(500).json({
@@ -21,7 +22,6 @@ export const calculateHeatLoadHandler = (req, res) => {
     });
   }
 };
-
 
 export const calculateVentilationHandler = (req, res) => {
   try {
